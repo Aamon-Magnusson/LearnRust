@@ -13,5 +13,5 @@ def print_grid(grid):
         print(' '.join(map(str, row)))
 
 # Generate and print the grid
-grid = generate_grid(15, 50)
+grid = generate_grid(30, 100)
 print_grid(grid)
