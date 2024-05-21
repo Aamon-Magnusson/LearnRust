@@ -1,8 +1,10 @@
 use std::{thread,time};
 use rand::Rng;
 
-const HEIGHT: usize = 45;
-const WIDTH: usize = 125;
+//const HEIGHT: usize = 47;
+//const WIDTH: usize = 140;
+const HEIGHT: usize = 30;
+const WIDTH: usize = 50;
 
 /*
  * Any live cell with fewer than two live neighbors dies, as if by underpopulation.
@@ -43,11 +45,11 @@ fn main() {
 
     print_sep();
 
-    let mut iterations = 0;
+    let mut generations = 0;
     let mut prev = [[0; WIDTH] ; HEIGHT];
 
     loop {
-        iterations += 1;
+        generations += 1;
 
         let mut new = [[0; WIDTH] ; HEIGHT];
 
@@ -100,7 +102,7 @@ fn main() {
         }
 
         if current == new || prev == new {
-            println!("The game of life ran for {iterations} iterations.");
+            println!("The game of life survived for {generations} generations.");
             break;
         }
 
