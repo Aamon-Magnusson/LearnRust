@@ -3,8 +3,8 @@ use rand::Rng;
 
 //const HEIGHT: usize = 47;
 //const WIDTH: usize = 140;
-const HEIGHT: usize = 30;
-const WIDTH: usize = 50;
+const HEIGHT: usize = 35;
+const WIDTH: usize = 75;
 
 /*
  * Any live cell with fewer than two live neighbors dies, as if by underpopulation.
@@ -20,6 +20,19 @@ fn print_sep () {
     println!("");
 }
 
+fn print_table (current: [[i32; WIDTH] ; HEIGHT]) {
+    for i in 0..HEIGHT {
+        for j in 0..WIDTH {
+            if current[i][j] == 1 {
+                print!("🟩");
+            } else {
+                print!("  ");
+            }
+        }
+        println!("");
+    }
+}
+
 fn main() {
     let mut current = [[0; WIDTH] ; HEIGHT];
 
@@ -31,18 +44,7 @@ fn main() {
     }
 
     print_sep();
-
-    for i in 0..HEIGHT {
-        for j in 0..WIDTH {
-            if current[i][j] == 1 {
-                print!("🟩");
-            } else {
-                print!("  ");
-            }
-        }
-        println!("");
-    }
-
+    print_table(current);
     print_sep();
 
     let mut generations = 0;
@@ -56,7 +58,7 @@ fn main() {
         for i in 0..HEIGHT {
             for j in 0..WIDTH {
 
-                let mut count: u32 = 0;
+                let mut count: i32 = 0;
 
                 if i != 0 {
                     count += current[i- 1][j];
@@ -109,16 +111,7 @@ fn main() {
         let millis = time::Duration::from_millis(200);
         thread::sleep(millis);
 
-        for i in 0..HEIGHT {
-            for j in 0..WIDTH {
-                if new[i][j] == 1 {
-                    print!("🟩");
-                } else {
-                    print!("  ");
-                }
-            }
-            println!("");
-        }
+        print_table(current);
         print_sep();
 
         prev = current;
