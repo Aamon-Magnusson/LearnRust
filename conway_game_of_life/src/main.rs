@@ -4,7 +4,7 @@ use rand::Rng;
 //const HEIGHT: usize = 47;
 //const WIDTH: usize = 140;
 const HEIGHT: usize = 35;
-const WIDTH: usize = 75;
+const WIDTH: usize = 85;
 
 /*
  * Any live cell with fewer than two live neighbors dies, as if by underpopulation.
@@ -33,6 +33,60 @@ fn print_table (current: [[i32; WIDTH] ; HEIGHT]) {
     }
 }
 
+fn check_table (current: [[i32; WIDTH] ; HEIGHT]) -> [[i32; WIDTH] ; HEIGHT] {
+    let mut new = [[0_i32; WIDTH] ; HEIGHT];
+
+    for i in 0..HEIGHT {
+        for j in 0..WIDTH {
+
+            let mut count: i32 = 0;
+
+            if i != 0 {
+                count += current[i- 1][j];
+            }
+            if j != 0 {
+                count += current[i][j - 1];
+            }
+            if i != HEIGHT - 1 {
+                count += current[i + 1][j];
+            }
+            if j != WIDTH - 1 {
+                count += current[i][j + 1];
+            }
+            if i != 0 && j != 0 {
+                count += current[i - 1][j - 1];
+            }
+            if i != 0 && j != WIDTH - 1 {
+                count += current[i - 1][j + 1];
+            }
+            if i != HEIGHT - 1 && j != WIDTH - 1 {
+                count += current[i + 1][j + 1];
+            }
+            if i != HEIGHT - 1 && j != 0 {
+                count += current[i + 1][j - 1];
+            }
+
+            if current[i][j] == 1 {
+                if count < 2 {
+                    new[i][j] = 0;
+                } else if count == 2 || count == 3 {
+                    new[i][j] = 1;
+                }else {
+                    new[i][j] = 0;
+                }
+            } else {
+                if count == 3 {
+                    new[i][j] = 1;
+                } else {
+                    new[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    return new;
+}
+
 fn main() {
     let mut current = [[0; WIDTH] ; HEIGHT];
 
@@ -53,55 +107,7 @@ fn main() {
     loop {
         generations += 1;
 
-        let mut new = [[0; WIDTH] ; HEIGHT];
-
-        for i in 0..HEIGHT {
-            for j in 0..WIDTH {
-
-                let mut count: i32 = 0;
-
-                if i != 0 {
-                    count += current[i- 1][j];
-                }
-                if j != 0 {
-                    count += current[i][j - 1];
-                }
-                if i != HEIGHT - 1 {
-                    count += current[i + 1][j];
-                }
-                if j != WIDTH - 1 {
-                    count += current[i][j + 1];
-                }
-                if i != 0 && j != 0 {
-                    count += current[i - 1][j - 1];
-                }
-                if i != 0 && j != WIDTH - 1 {
-                    count += current[i - 1][j + 1];
-                }
-                if i != HEIGHT - 1 && j != WIDTH - 1 {
-                    count += current[i + 1][j + 1];
-                }
-                if i != HEIGHT - 1 && j != 0 {
-                    count += current[i + 1][j - 1];
-                }
-
-                if current[i][j] == 1 {
-                    if count < 2 {
-                        new[i][j] = 0;
-                    } else if count == 2 || count == 3 {
-                        new[i][j] = 1;
-                    }else {
-                        new[i][j] = 0;
-                    }
-                } else {
-                    if count == 3 {
-                        new[i][j] = 1;
-                    } else {
-                        new[i][j] = 0;
-                    }
-                }
-            }
-        }
+        let new = check_table(current);
 
         if current == new || prev == new {
             println!("The game of life survived for {generations} generations.");
